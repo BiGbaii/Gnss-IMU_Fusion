@@ -2,57 +2,6 @@
 
 unset(GLOG_FOUND)
 
-if (NOT DEFINED GLOG_PREFER_EXPORTED_GLOG_CMAKE_CONFIGURATION
-    AND NOT GLOG_INCLUDE_DIR_HINTS
-    AND NOT GLOG_LIBRARY_DIR_HINTS)
-  glog_message(STATUS "No preference for use of exported glog CMake "
-    "configuration set, and no hints for include/library directories provided. "
-    "Defaulting to preferring an installed/exported glog CMake configuration "
-    "if available.")
-  set(GLOG_PREFER_EXPORTED_GLOG_CMAKE_CONFIGURATION TRUE)
-endif()
-
-
-if (GLOG_PREFER_EXPORTED_GLOG_CMAKE_CONFIGURATION)
-  find_package(glog QUIET
-                    NAMES google-glog glog
-                    HINTS ${glog_DIR} ${HOMEBREW_INSTALL_PREFIX}
-                    NO_MODULE
-                    NO_CMAKE_PACKAGE_REGISTRY
-                    NO_CMAKE_BUILDS_PATH)
-  if (glog_FOUND)
-    glog_message(STATUS "Found installed version of glog: ${glog_DIR}")
-  else()
-    # Failed to find an installed version of glog, repeat search allowing
-    # exported build directories.
-    glog_message(STATUS "Failed to find installed glog CMake configuration, "
-      "searching for glog build directories exported with CMake.")
-    # Again pass NO_CMAKE_BUILDS_PATH, as we know that glog is exported and
-    # do not want to treat projects built with the CMake GUI preferentially.
-    find_package(glog QUIET
-                      NAMES google-glog glog
-                      NO_MODULE
-                      NO_CMAKE_BUILDS_PATH)
-    if (glog_FOUND)
-      glog_message(STATUS "Found exported glog build directory: ${glog_DIR}")
-    endif(glog_FOUND)
-  endif(glog_FOUND)
-
-  set(FOUND_INSTALLED_GLOG_CMAKE_CONFIGURATION ${glog_FOUND})
-
-  if (FOUND_INSTALLED_GLOG_CMAKE_CONFIGURATION)
-    glog_message(STATUS "Detected glog version: ${glog_VERSION}")
-    set(GLOG_FOUND ${glog_FOUND})
-    # glog wraps the include directories into the exported glog::glog target.
-    set(GLOG_INCLUDE_DIR "")
-    set(GLOG_LIBRARY glog::glog)
-  else (FOUND_INSTALLED_GLOG_CMAKE_CONFIGURATION)
-    glog_message(STATUS "Failed to find an installed/exported CMake "
-      "configuration for glog, will perform search for installed glog "
-      "components.")
-  endif (FOUND_INSTALLED_GLOG_CMAKE_CONFIGURATION)
-endif(GLOG_PREFER_EXPORTED_GLOG_CMAKE_CONFIGURATION)
-
 if (NOT GLOG_FOUND)
 
   # Search user-installed locations first, so that we prefer user installs
@@ -135,7 +84,6 @@ if (NOT GLOG_FOUND)
   endif (GLOG_LIBRARY AND
     NOT "${LOWERCASE_GLOG_LIBRARY}" MATCHES ".*glog[^/]*")
 
-  glog_reset_find_library_prefix()
 
 endif(NOT GLOG_FOUND)
 
