@@ -6,7 +6,8 @@ ros2
 
 Eigen
 
-glog
+glog (version 0.4.0) find it on the below LINKS:
+https://github.com/google/glog/releases
 
 # Notes
 for getting GNSS
