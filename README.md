@@ -1,7 +1,9 @@
 # Gnss-IMU_Fusion
 ros2 version 
+
 using ESKF
-you can set you own parameters in include/gins.h  GinsNode's constructor (mainly is the I_p_Gps,it be acquiescently set to {0,0,0}
+
+you can set you own parameters in include/gins.h  GinsNode's constructor (mainly is the I_p_Gps,it be acquiescently set to {0,0,0})
 
 # required
 ros2
